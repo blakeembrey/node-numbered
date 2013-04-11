@@ -30,12 +30,25 @@ describe('number words', function () {
   it('should handle tens', function () {
     assert.equal(numbers(29), 'twenty-nine');
     assert.equal(numbers(36), 'thirty-six');
-    assert.equal(numbers(45), 'fourty-five');
+    assert.equal(numbers(45), 'forty-five');
     assert.equal(numbers(51), 'fifty-one');
     assert.equal(numbers(63), 'sixty-three');
     assert.equal(numbers(78), 'seventy-eight');
     assert.equal(numbers(84), 'eighty-four');
     assert.equal(numbers(92), 'ninety-two');
+  });
+
+  it('should work normally with negative numbers', function () {
+    assert.equal(numbers(-10), 'negative ten');
+    assert.equal(numbers(-154), 'negative one hundred and fifty-four');
+    assert.equal(numbers(-1000), 'negative one thousand');
+  });
+
+  it('should work with decimals', function () {
+    assert.equal(numbers(0.5), 'zero decimal five');
+    assert.equal(numbers(0.05), 'zero decimal zero five');
+    assert.equal(numbers(60.5), 'sixty decimal five');
+    assert.equal(numbers(55.2), 'fifty-five decimal two'); // Tests floating point bugs
   });
 
   it('should handle increasingly larger numbers', function () {
@@ -44,7 +57,7 @@ describe('number words', function () {
     assert.equal(numbers(1000), 'one thousand');
     assert.equal(numbers(1033), 'one thousand and thirty-three');
     assert.equal(numbers(1693), 'one thousand, six hundred and ninety-three');
-    assert.equal(numbers(10845), 'ten thousand, eight hundred and fourty-five');
+    assert.equal(numbers(10845), 'ten thousand, eight hundred and forty-five');
     assert.equal(numbers(763405), 'seven hundred and sixty-three thousand, four hundred and five');
     assert.equal(numbers(2874595), 'two million, eight hundred and seventy-four thousand, five hundred and ninety-five');
     assert.equal(numbers(Math.pow(10, 7)), 'ten million');
@@ -54,5 +67,7 @@ describe('number words', function () {
     assert.equal(numbers(Math.pow(10, 11) + 6), 'one hundred billion and six');
     assert.equal(numbers(Math.pow(10, 12) + 3), 'one trillion and three');
     assert.equal(numbers(Math.pow(10, 13)), 'ten trillion');
+    assert.equal(numbers(Math.pow(10, 9) + Math.pow(10, 8)), 'one billion, one hundred million');
+    assert.equal(numbers(Math.pow(10, 100)), 'one googol');
   });
 });
