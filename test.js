@@ -70,4 +70,54 @@ describe('number words', function () {
     assert.equal(numbers(Math.pow(10, 9) + Math.pow(10, 8)), 'one billion, one hundred million');
     assert.equal(numbers(Math.pow(10, 100)), 'one googol');
   });
+
+  it('should transform words to numbers', function () {
+    assert.equal(numbers('zero'), 0);
+    assert.equal(numbers('one'), 1);
+    assert.equal(numbers('two'), 2);
+    assert.equal(numbers('three'), 3);
+    assert.equal(numbers('four'), 4);
+    assert.equal(numbers('five'), 5);
+    assert.equal(numbers('six'), 6);
+    assert.equal(numbers('seven'), 7);
+    assert.equal(numbers('eight'), 8);
+    assert.equal(numbers('nine'), 9);
+    assert.equal(numbers('ten'), 10);
+    assert.equal(numbers('eleven'), 11);
+    assert.equal(numbers('twelve'), 12);
+    assert.equal(numbers('thirteen'), 13);
+    assert.equal(numbers('fourteen'), 14);
+    assert.equal(numbers('fifteen'), 15);
+    assert.equal(numbers('sixteen'), 16);
+    assert.equal(numbers('seventeen'), 17);
+    assert.equal(numbers('eighteen'), 18);
+    assert.equal(numbers('nineteen'), 19);
+    assert.equal(numbers('twenty'), 20);
+  });
+
+  it('should transform multiple words into numbers', function () {
+    assert.equal(numbers(numbers(29)), 29);
+    assert.equal(numbers(numbers(36)), 36);
+    assert.equal(numbers(numbers(45)), 45);
+    assert.equal(numbers(numbers(51)), 51);
+    assert.equal(numbers(numbers(63)), 63);
+    assert.equal(numbers(numbers(78)), 78);
+    assert.equal(numbers(numbers(84)), 84);
+    assert.equal(numbers(numbers(92)), 92);
+  });
+
+  it('should transform more complicated number combinations', function () {
+    assert.equal(numbers(numbers(122)), 122);
+    assert.equal(numbers(numbers(1537)), 1537);
+    assert.equal(numbers(numbers(10235)), 10235);
+    assert.equal(numbers(numbers(1303457)), 1303457);
+    assert.equal(numbers(numbers(832698483)), 832698483);
+    assert.equal(numbers(numbers(9832798473285)), 9832798473285);
+  });
+
+  it('should handle work normally with negative numbers', function () {
+    assert.equal(numbers(numbers(-833)), -833);
+    assert.equal(numbers(numbers(-87365)), -87365);
+    assert.equal(numbers(numbers(-9821748972)), -9821748972);
+  });
 });

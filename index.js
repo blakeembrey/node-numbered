@@ -59,6 +59,18 @@ helpers[63]  = 'vigintillion';
 helpers[100] = 'googol';
 helpers[303] = 'centillion';
 
+// Make a hash of the numbers and helper numbers reversed
+// E.g. The key as the word and value as the number
+var numbersMap = {};
+
+Object.keys(numbers).forEach(function (num) {
+  numbersMap[numbers[num]] = +num;
+});
+
+Object.keys(helpers).forEach(function (num) {
+  numbersMap[helpers[num]] = Math.pow(10, +num);
+});
+
 var intervals = function (num) {
   var match;
   if ((match = ('' + num).match(/e\+(\d+)/))) {
@@ -72,8 +84,10 @@ var numberWords = module.exports = function (num) {
   if (typeof num === 'number') {
     return numberWords.stringify(num);
   }
-  // Word to number conversion will be coming next..
-  // return numberWords.numberify(num);
+  if (typeof num === 'string') {
+    return numberWords.numberify(num);
+  }
+  throw new Error('Number words can handle handle numbers and/or strings');
 };
 
 numberWords.stringify = function (num) {
@@ -128,4 +142,43 @@ numberWords.stringify = function (num) {
   }
 
   return word.join(' ');
+};
+
+numberWords.numberify = function (num) {
+  if (typeof num !== 'string') { return false; }
+
+  var modifier = 1,
+      largest  = 0,
+      stack    = [];
+
+  var calcStack = function () {
+    return stack.reduceRight(function (memo, num, index, array) {
+      if (num > array[index + 1]) {
+        return memo * num;
+      }
+      return memo + num;
+    }, 0) * largest;
+  };
+
+  var test = num.split(/\W+/g).map(function (num) {
+    return numbersMap[num] || num;
+  }).filter(function (num) {
+    if (num === 'negative') {
+      modifier *= -1;
+    }
+    return isFinite(num); // Remove numbers we don't understand
+  }).reduceRight(function (memo, num) {
+    console.log(num);
+    if (num < largest) {
+      stack.push(num);
+      if (stack.length === 1) { memo = memo - largest; }
+      return memo;
+    }
+    var plus = calcStack();
+    stack    = []; // Reset the stack for new numbers
+    largest  = num;
+    return memo + num + plus;
+  }, 0);
+
+  return modifier * (test + calcStack());
 };
