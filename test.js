@@ -48,7 +48,7 @@ describe('number words', function () {
     assert.equal(numbers(0.5), 'zero decimal five');
     assert.equal(numbers(0.05), 'zero decimal zero five');
     assert.equal(numbers(60.5), 'sixty decimal five');
-    assert.equal(numbers(55.2), 'fifty-five decimal two'); // Tests floating point bugs
+    assert.equal(numbers(55.2), 'fifty-five decimal two');
   });
 
   it('should handle increasingly larger numbers', function () {
@@ -119,5 +119,21 @@ describe('number words', function () {
     assert.equal(numbers(numbers(-833)), -833);
     assert.equal(numbers(numbers(-87365)), -87365);
     assert.equal(numbers(numbers(-9821748972)), -9821748972);
+  });
+
+  it('should work with decimals', function () {
+    assert.equal(numbers(numbers(0.5)), 0.5);
+    assert.equal(numbers(numbers(0.05)), 0.05);
+    assert.equal(numbers(numbers(60.5)), 60.5);
+    assert.equal(numbers(numbers(55.2)), 55.2);
+  });
+
+  it('should work with more human-like input', function () {
+    assert.equal(numbers('zero five'), 5);
+    assert.equal(numbers('five zero'), 50);
+    assert.equal(numbers('zero point five'), 0.5);
+    assert.equal(numbers('zero point zero five'), 0.05);
+    assert.equal(numbers('two six point zero nine'), 26.09);
+    assert.equal(numbers('zero zero nine five decimal two'), 95.2);
   });
 });

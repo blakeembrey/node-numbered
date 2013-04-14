@@ -1,3 +1,3 @@
 # Number Words
 
-Turn a number into a formatted word string.
+Turn any number into a formatted word string, and turn it back again!
