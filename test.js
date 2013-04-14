@@ -45,10 +45,10 @@ describe('number words', function () {
   });
 
   it('should work with decimals', function () {
-    assert.equal(numbers(0.5), 'zero decimal five');
-    assert.equal(numbers(0.05), 'zero decimal zero five');
-    assert.equal(numbers(60.5), 'sixty decimal five');
-    assert.equal(numbers(55.2), 'fifty-five decimal two');
+    assert.equal(numbers(0.5), 'zero point five');
+    assert.equal(numbers(0.05), 'zero point zero five');
+    assert.equal(numbers(60.5), 'sixty point five');
+    assert.equal(numbers(55.2), 'fifty-five point two');
   });
 
   it('should handle increasingly larger numbers', function () {
@@ -135,5 +135,11 @@ describe('number words', function () {
     assert.equal(numbers('zero point zero five'), 0.05);
     assert.equal(numbers('two six point zero nine'), 26.09);
     assert.equal(numbers('zero zero nine five decimal two'), 95.2);
+    assert.equal(numbers('zero eight zero three'), 803);
+    assert.equal(numbers('eight zero three zero five'), 80305);
+    assert.equal(numbers('twenty thirteen'), 2013);
+    assert.equal(numbers('two decimal fifty six'), 2.56);
+    // assert.equal(numbers('twenty one three'), 2013);
+    // assert.equal(numbers('one twenty'), 120);
   });
 });

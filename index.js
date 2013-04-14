@@ -1,5 +1,5 @@
 var numbers = {
-  '.': 'decimal',
+  '.': 'point',
   '-': 'negative',
   0: 'zero',
   1: 'one',
@@ -62,7 +62,8 @@ helpers[303] = 'centillion';
 // Make a hash of the numbers and helper numbers reversed
 // E.g. The key as the word and value as the number
 var numbersMap = {};
-numbersMap.point = '.';
+numbersMap.naught  = 0;
+numbersMap.decimal = '.';
 
 Object.keys(numbers).forEach(function (num) {
   numbersMap[numbers[num]] = isNaN(+num) ? num : +num;
@@ -111,6 +112,8 @@ numberWords.stringify = function (num) {
       interval,
       remaining;
 
+  num = isNaN(+num) ? num : +num;
+
   // Numbers are super buggy in JS over 10^20
   if (typeof num !== 'number') { return false; }
   // If the number is in the numbers object, we can quickly return
@@ -124,14 +127,7 @@ numberWords.stringify = function (num) {
   if (num % 1) {
     word.push(numberWords.stringify(Math.floor(num)));
     word.push(numbers['.']);
-    // Have to split the number instead of using the modulus operator
-    // thanks to JavaScript's awesome floating point accuracy
-    num = +('0.' + ('' + num).split('.')[1]);
-    while (num < 0.1) {
-      word.push(numberWords.stringify(0));
-      num = num * 10;
-    }
-    word.push(numberWords.stringify(+('' + num).slice(2)));
+    word = word.concat(('' + num).split('.')[1].split('').map(numberWords.stringify));
     return word.join(' ');
   }
 
@@ -195,7 +191,27 @@ numberWords.numberify = function (num) {
   }).reduceRight(function (memo, num) {
     var interval = intervals(num),
         decimals,
-        plus;
+        output;
+
+    // Check the interval is smaller than the largest one, then create a stack
+    if (typeof num === 'number' && interval < largestInterval) {
+      if (!stack.length) { memo = memo - largest; }
+      stack.push(num);
+      return memo;
+    }
+
+    memo  = memo + totalStack();
+    stack = []; // Reset the stack for more computations
+
+    // If the number is a decimal, transform everything we were just working with
+    if (num === '.') {
+      decimals = zeros + ('' + memo).length;
+      zeros    = 0;
+      // Reset the largest intervals and stuff
+      largest         = 0;
+      largestInterval = 0;
+      return memo * Math.pow(10, decimals * -1);
+    }
 
     // Keep a count of zeros we encountered
     if (num === 0) {
@@ -203,33 +219,21 @@ numberWords.numberify = function (num) {
       return memo;
     }
 
-    // Check the interval is smaller than the largest one, then create a stack
-    if (interval < largestInterval) {
-      if (!stack.length) { memo = memo - largest; }
-      stack.push(num);
-      return memo;
-    }
-
-    plus  = totalStack();
-    stack = []; // Reset the stack for more computations
-
-    // If the number is a decimal, transform everything we were just working with
-    if (num === '.') {
-      decimals = zeros + 1;
-      zeros    = 0;
-      return (memo + plus) * Math.pow(10, decimals * -1);
-    }
-
     // Shove the number on the front if the intervals match and the number is a whole
     if (memo >= 1 && interval === largestInterval) {
-      return +('' + num + (memo + plus));
+      output = '' + memo;
+      // Decrement the zeros count while adding zeros to the front of the number
+      while (zeros && zeros--) {
+        output = '0' + output;
+      }
+      return +(num + output);
     }
 
     // Store the largest number for future use
     largest         = num;
     largestInterval = intervals(largest);
 
-    return (memo + num + plus) * Math.pow(10, zeros);
+    return (memo + num) * Math.pow(10, zeros);
   }, 0);
 
   return modifier * (total + totalStack());
