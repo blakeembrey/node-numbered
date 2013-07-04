@@ -139,7 +139,8 @@ describe('number words', function () {
     assert.equal(numbers('eight zero three zero five'), 80305);
     assert.equal(numbers('twenty thirteen'), 2013);
     assert.equal(numbers('two decimal fifty six'), 2.56);
-    // assert.equal(numbers('twenty one three'), 2013);
-    // assert.equal(numbers('one twenty'), 120);
+    assert.equal(numbers('nineteen thirty-five'), 1935);
+    assert.equal(numbers('one two five six'), 1256);
+    assert.equal(numbers('thirty hundred'), 3000);
   });
 });

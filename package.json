@@ -1,6 +1,6 @@
 {
   "name": "number-words",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Turn a number into a formatted string",
   "main": "index.js",
   "scripts": {

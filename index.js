@@ -62,7 +62,9 @@ helpers[303] = 'centillion';
 // Make a hash of the numbers and helper numbers reversed
 // E.g. The key as the word and value as the number
 var numbersMap = {};
+numbersMap.nil     = 0;
 numbersMap.naught  = 0;
+numbersMap.period  = '.';
 numbersMap.decimal = '.';
 
 Object.keys(numbers).forEach(function (num) {
@@ -93,11 +95,11 @@ var intervals = function (num) {
  * @return {string|number}
  */
 var numberWords = module.exports = function (num) {
+  if (typeof num === 'string') {
+    return numberWords.parse(num);
+  }
   if (typeof num === 'number') {
     return numberWords.stringify(num);
-  }
-  if (typeof num === 'string') {
-    return numberWords.numberify(num);
   }
   throw new Error('Number words can handle handle numbers and/or strings');
 };
@@ -159,22 +161,24 @@ numberWords.stringify = function (num) {
  * @param  {string} num
  * @return {number}
  */
-numberWords.numberify = function (num) {
+numberWords.parse = function (num) {
   if (typeof num !== 'string') { return false; }
 
-  var modifier = 1,
-      largest  = 0,
+  var modifier        = 1,
+      largest         = 0,
       largestInterval = 0,
-      zeros    = 0, // Keep track of the number of leading zeros in the decimal
-      stack    = [];
+      zeros           = 0, // Keep track of the number of leading zeros in the decimal
+      stack           = [];
 
   var totalStack = function () {
-    return stack.reduceRight(function (memo, num, index, array) {
+    var total = stack.reduceRight(function (memo, num, index, array) {
       if (num > array[index + 1]) {
         return memo * num;
       }
       return memo + num;
-    }, 0) * largest;
+    }, 0);
+
+    return total * largest;
   };
 
   var total = num.split(/\W+/g).map(function (num) {

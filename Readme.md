@@ -1,6 +1,6 @@
 # Number Words
 
-Turn any number into a formatted word string, and turn it back again!
+Turn any number into a formatted word string, and turn it back again.
 
 ## Installation
 
@@ -14,28 +14,36 @@ npm install number-words --save
 var numbers = require('number-words');
 ```
 
-* `numbers(number|word)`
-* `numbers.stringify(number)`
-* `numbers.numberify(word)`
+* [numbers( number|string )](#function)
+* [numbers.parse( string )](#parse)
+* [numbers.stringify( number )](#stringify)
 
-```javascript
-numbers(20) // twenty
-numbers(150) // one hundred and fifty
-numbers(1620) // one thousand, six hundred and twenty
-numbers(3726473223) // three billion, seven hundred and twenty-six million, four hundred and seventy-three thousand, two hundred and twenty-three
+### Function
 
-numbers(0.5) // zero point five
-numbers(0.7345) // zero point seven three four five
-numbers(8364.3243) // eight thousand, three hundred and sixty-four point three two four three
+Number Words exposes a single function that accepts either a string or a number. The string will delegate to the `parse` method and a number will delegate to the `stringify` method.
 
-numbers('fifty six') // 56
-numbers('nine hundred and twenty two') // 922
-numbers('three hundred and fifty thousand') // 350000
-numbers('six billion and ninety million and three') // 6090000003
+### Parse
 
-numbers('point six six') // 0.66
-numbers('zero point two one nine') // 0.219
-numbers('five point five') // 5.5
+Parses a string into a number as best as possible.
+
+```
+numbers.parse('ninety nine');
+=> 99
+
+numbers.parse('point two five nine');
+=> 0.259
+```
+
+### Stringify
+
+Stringifies a number to the word equivalent.
+
+```
+numbers.stringify(99);
+=> "ninety nine"
+
+numbers.stringify(0.259);
+=> "zero point two five nine"
 ```
 
 ## License
