@@ -1,6 +1,6 @@
 {
-  "name": "number-words",
-  "version": "0.0.3",
+  "name": "numbered",
+  "version": "0.0.4",
   "main": [
     "./index.js"
   ],

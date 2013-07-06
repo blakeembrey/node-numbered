@@ -1,12 +1,12 @@
 {
-  "name": "number-words",
-  "version": "0.0.3",
-  "description": "Turn a number into a formatted string",
+  "name": "numbered",
+  "version": "0.0.4",
+  "description": "Turns a number into word based equivalent, and can parse it back again",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test.js"
   },
-  "repository": "",
+  "repository": "git@github.com:blakeembrey/node-numbered.git",
   "keywords": [
     "numbers",
     "words"

@@ -1,22 +1,22 @@
-# Number Words
+# Numbered
 
 Turn any number into a formatted word string, and turn it back again.
 
 ## Installation
 
 ```
-npm install number-words --save
+npm install numbered --save
 ```
 
 ## API
 
 ```javascript
-var numbers = require('number-words');
+var numbered = require('numbered');
 ```
 
-* [numbers( number|string )](#function)
-* [numbers.parse( string )](#parse)
-* [numbers.stringify( number )](#stringify)
+* [numbered( number|string )](#function)
+* [numbered.parse( string )](#parse)
+* [numbered.stringify( number )](#stringify)
 
 ### Function
 
@@ -27,10 +27,10 @@ Number Words exposes a single function that accepts either a string or a number.
 Parses a string into a number as best as possible.
 
 ```
-numbers.parse('ninety nine');
+numbered.parse('ninety nine');
 => 99
 
-numbers.parse('point two five nine');
+numbered.parse('point two five nine');
 => 0.259
 ```
 
@@ -39,10 +39,10 @@ numbers.parse('point two five nine');
 Stringifies a number to the word equivalent.
 
 ```
-numbers.stringify(99);
+numbered.stringify(99);
 => "ninety nine"
 
-numbers.stringify(0.259);
+numbered.stringify(0.259);
 => "zero point two five nine"
 ```
 
