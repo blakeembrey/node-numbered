@@ -1,6 +1,6 @@
 {
   "name": "numbered",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Turns a number into word based equivalent, and parse it back again",
   "main": "index.js",
   "scripts": {
