@@ -1,5 +1,10 @@
 # Numbered
 
+[![NPM version][npm-image]][npm-url]
+[![Build status][travis-image]][travis-url]
+[![Test coverage][coveralls-image]][coveralls-url]
+[![Gittip][gittip-image]][gittip-url]
+
 Turn any number into a formatted word string, and turn it back again.
 
 ## Installation
@@ -49,3 +54,12 @@ numbered.stringify(0.259);
 ## License
 
 MIT
+
+[npm-image]: https://img.shields.io/npm/v/numbered.svg?style=flat
+[npm-url]: https://npmjs.org/package/numbered
+[travis-image]: https://img.shields.io/travis/blakeembrey/node-numbered.svg?style=flat
+[travis-url]: https://travis-ci.org/blakeembrey/node-numbered
+[coveralls-image]: https://img.shields.io/coveralls/blakeembrey/node-numbered.svg?style=flat
+[coveralls-url]: https://coveralls.io/r/blakeembrey/node-numbered?branch=master
+[gittip-image]: https://img.shields.io/gittip/blakeembrey.svg?style=flat
+[gittip-url]: https://www.gittip.com/blakeembrey
