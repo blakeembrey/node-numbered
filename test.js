@@ -1,6 +1,6 @@
 /*global describe,it*/
-var assert  = require('assert'),
-    numbers = require('./');
+var assert  = require('assert');
+var numbers = require('./');
 
 describe('number words', function () {
   it('should turn numbers into words', function () {
