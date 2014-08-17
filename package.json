@@ -6,10 +6,12 @@
   "scripts": {
     "test": "istanbul cover _mocha -- -R spec"
   },
-  "repository": "git@github.com:blakeembrey/node-numbered.git",
+  "repository": "https://github.com/blakeembrey/node-numbered.git",
   "keywords": [
     "numbers",
-    "words"
+    "words",
+    "stringify",
+    "parse"
   ],
   "author": "Blake Embrey",
   "license": "MIT",
