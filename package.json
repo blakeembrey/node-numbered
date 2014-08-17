@@ -13,7 +13,11 @@
     "stringify",
     "parse"
   ],
-  "author": "Blake Embrey",
+  "author": {
+    "name": "Blake Embrey",
+    "email": "hello@blakeembrey.com",
+    "url": "http://blakeembrey.me"
+  },
   "license": "MIT",
   "readmeFilename": "Readme.md",
   "devDependencies": {
