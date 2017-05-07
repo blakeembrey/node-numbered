@@ -21,7 +21,7 @@
   "license": "MIT",
   "readmeFilename": "Readme.md",
   "devDependencies": {
-    "istanbul": "^0.3.0",
-    "mocha": "^1.19.0"
+    "istanbul": "^0.4.5",
+    "mocha": "^3.3.0"
   }
 }
