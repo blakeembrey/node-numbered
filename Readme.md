@@ -1,11 +1,9 @@
 # Numbered
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/blakeembrey/node-numbered.svg)](https://greenkeeper.io/)
-
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
-[![Gittip][gittip-image]][gittip-url]
+[![Greenkeeper badge](https://badges.greenkeeper.io/blakeembrey/node-numbered.svg)](https://greenkeeper.io/)
 
 Turn any number into a formatted word string, and turn it back again.
 
@@ -63,5 +61,3 @@ MIT
 [travis-url]: https://travis-ci.org/blakeembrey/node-numbered
 [coveralls-image]: https://img.shields.io/coveralls/blakeembrey/node-numbered.svg?style=flat
 [coveralls-url]: https://coveralls.io/r/blakeembrey/node-numbered?branch=master
-[gittip-image]: https://img.shields.io/gittip/blakeembrey.svg?style=flat
-[gittip-url]: https://www.gittip.com/blakeembrey
