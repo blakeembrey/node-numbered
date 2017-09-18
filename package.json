@@ -1,6 +1,6 @@
 {
   "name": "numbered",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Stringify any number into words, and parse number strings back to a number",
   "main": "index.js",
   "typings": "index.d.ts",
