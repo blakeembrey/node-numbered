@@ -1,8 +1,13 @@
 {
   "name": "numbered",
   "version": "1.0.0",
-  "description": "Turns a number into word based equivalent, and parse it back again",
+  "description": "Stringify any number into words, and parse number strings back to a number",
   "main": "index.js",
+  "typings": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
   "scripts": {
     "test": "istanbul cover _mocha -- -R spec"
   },
