@@ -10,7 +10,7 @@
     root.numbered = factory();
   }
 })(this, function () {
-  var numbers = {
+  var NUMBER_MAP = {
     '.': 'point',
     '-': 'negative',
     0: 'zero',
@@ -44,128 +44,148 @@
   };
 
   // http://en.wikipedia.org/wiki/English_numerals#Cardinal_numbers
-  var helpers = {};
-  // Store the helpers in the power of tens
-  helpers[2]   = 'hundred';
-  helpers[3]   = 'thousand';
-  helpers[6]   = 'million';
-  helpers[9]   = 'billion';
-  helpers[12]  = 'trillion';
-  helpers[15]  = 'quadrillion';
-  helpers[18]  = 'quintillion';
-  helpers[21]  = 'sextillion';
-  helpers[24]  = 'septillion';
-  helpers[27]  = 'octillion';
-  helpers[30]  = 'nonillion';
-  helpers[33]  = 'decillion';
-  helpers[36]  = 'undecillion';
-  helpers[39]  = 'duodecillion';
-  helpers[42]  = 'tredecillion';
-  helpers[45]  = 'quattuordecillion';
-  helpers[48]  = 'quindecillion';
-  helpers[51]  = 'sexdecillion';
-  helpers[54]  = 'septendecillion';
-  helpers[57]  = 'octodecillion';
-  helpers[60]  = 'novemdecillion';
-  helpers[63]  = 'vigintillion';
-  helpers[100] = 'googol';
-  helpers[303] = 'centillion';
+  var CARDINAL_MAP = {
+    2: 'hundred',
+    3: 'thousand',
+    6: 'million',
+    9: 'billion',
+    12: 'trillion',
+    15: 'quadrillion',
+    18: 'quintillion',
+    21: 'sextillion',
+    24: 'septillion',
+    27: 'octillion',
+    30: 'nonillion',
+    33: 'decillion',
+    36: 'undecillion',
+    39: 'duodecillion',
+    42: 'tredecillion',
+    45: 'quattuordecillion',
+    48: 'quindecillion',
+    51: 'sexdecillion',
+    54: 'septendecillion',
+    57: 'octodecillion',
+    60: 'novemdecillion',
+    63: 'vigintillion',
+    100: 'googol',
+    303: 'centillion'
+  };
 
-  // Make a hash of the numbers and helper numbers reversed
-  // E.g. The key as the word and value as the number
-  var numbersMap = {};
-  numbersMap.nil     = 0;
-  numbersMap.naught  = 0;
-  numbersMap.period  = '.';
-  numbersMap.decimal = '.';
+  // Make a hash of words back to their numeric value.
+  var WORD_MAP = {
+    nil: 0,
+    naught: 0,
+    period: '.',
+    decimal: '.'
+  };
 
-  Object.keys(numbers).forEach(function (num) {
-    numbersMap[numbers[num]] = isNaN(+num) ? num : +num;
+  Object.keys(NUMBER_MAP).forEach(function (num) {
+    WORD_MAP[NUMBER_MAP[num]] = isNaN(+num) ? num : +num;
   });
 
-  Object.keys(helpers).forEach(function (num) {
-    numbersMap[helpers[num]] = isNaN(+num) ? num : Math.pow(10, +num);
+  Object.keys(CARDINAL_MAP).forEach(function (num) {
+    WORD_MAP[CARDINAL_MAP[num]] = isNaN(+num) ? num : Math.pow(10, +num);
   });
 
   /**
-   * Returns the number of significant figures for the number
+   * Returns the number of significant figures for the number.
+   *
    * @param  {number} num
    * @return {number}
    */
-  var intervals = function (num) {
-    var match;
-    if ((match = ('' + num).match(/e\+(\d+)/))) {
-      return match[1];
-    }
+  function intervals (num) {
+    var match = String(num).match(/e\+(\d+)/);
 
-    return ('' + num).length - 1;
-  };
+    if (match) return match[1];
+
+    return String(num).length - 1;
+  }
 
   /**
-   * Accepts both a string and number type - and return the opposite
+   * Calculate the value of the current stack.
+   *
+   * @param {Array}  stack
+   * @param {number} largest
+   */
+  function totalStack (stack, largest) {
+    var total = stack.reduceRight(function (prev, num, index) {
+      if (num > stack[index + 1]) {
+        return prev * num;
+      }
+
+      return prev + num;
+    }, 0);
+
+    return total * largest;
+  }
+
+  /**
+   * Accepts both a string and number type, and return the opposite.
+   *
    * @param  {string|number} num
    * @return {string|number}
    */
-  var numberWords = function (num) {
-    if (typeof num === 'string') {
-      return numberWords.parse(num);
-    }
-    if (typeof num === 'number') {
-      return numberWords.stringify(num);
-    }
-    throw new Error('Number words can handle handle numbers and/or strings');
-  };
+  function numbered (num) {
+    if (typeof num === 'string') return numbered.parse(num);
+    if (typeof num === 'number') return numbered.stringify(num);
+
+    throw new Error('Numbered can only parse strings or stringify numbers');
+  }
 
   /**
-   * Turn a number into a string representation
+   * Turn a number into a string representation.
+   *
    * @param  {number} num
    * @return {string}
    */
-  numberWords.stringify = function (num) {
-    var word = [],
-        interval,
-        remaining;
+  numbered.stringify = function (value) {
+    var num = Number(value);
+    var floor = Math.floor(num);
 
-    num = isNaN(+num) ? num : +num;
+    // If the number is in the numbers object, we quickly return.
+    if (NUMBER_MAP[num]) return NUMBER_MAP[num];
 
-    // Numbers are super buggy in JS over 10^20
-    if (typeof num !== 'number') { return false; }
-    // If the number is in the numbers object, we can quickly return
-    if (numbers[num]) { return numbers[num]; }
-    // If the number is a negative value
-    if (num < 0) {
-      return numbers['-'] + ' ' + numberWords.stringify(num * -1);
+    // If the number is a negative value.
+    if (num < 0) return NUMBER_MAP['-'] + ' ' + numbered.stringify(-num);
+
+    // Check if we have decimals.
+    if (floor !== num) {
+      var words = [numbered.stringify(floor), NUMBER_MAP['.']];
+      var chars = String(num).split('.').pop();
+
+      for (var i = 0; i < chars.length; i++) {
+        words.push(numbered.stringify(+chars[i]));
+      }
+
+      return words.join(' ');
     }
 
-    // Check if we have decimals
-    if (num % 1) {
-      word.push(numberWords.stringify(Math.floor(num)));
-      word.push(numbers['.']);
-      word = word.concat(('' + num).split('.')[1].split('').map(numberWords.stringify));
-      return word.join(' ');
-    }
+    var interval = intervals(num);
 
-    interval = intervals(num);
-    // It's below one hundred, but greater than nine
+    // It's below one hundred, but greater than nine.
     if (interval === 1) {
-      word.push(numbers[Math.floor(num / 10) * 10] + '-' + numberWords.stringify(Math.floor(num % 10)));
-    }
-    // Simple check to find the closest full number helper
-    while (interval > 3 && !helpers[interval]) {
-      interval -= 1;
+      return NUMBER_MAP[Math.floor(num / 10) * 10] + '-' + numbered.stringify(Math.floor(num % 10));
     }
 
-    if (helpers[interval]) {
-      remaining = Math.floor(num % Math.pow(10, interval));
-      word.push(numberWords.stringify(Math.floor(num / Math.pow(10, interval))));
-      word.push(helpers[interval] + (remaining > 99 ? ',' : ''));
+    var sentence = [];
+
+    // Simple check to find the closest full number helper.
+    while (!CARDINAL_MAP[interval]) interval -= 1;
+
+    if (CARDINAL_MAP[interval]) {
+      var remaining = Math.floor(num % Math.pow(10, interval));
+
+      sentence.push(numbered.stringify(Math.floor(num / Math.pow(10, interval))));
+      sentence.push(CARDINAL_MAP[interval] + (remaining > 99 ? ',' : ''));
+
       if (remaining) {
-        if (remaining < 100) { word.push('and'); }
-        word.push(numberWords.stringify(remaining));
+        if (remaining < 100) sentence.push('and');
+
+        sentence.push(numbered.stringify(remaining));
       }
     }
 
-    return word.join(' ');
+    return sentence.join(' ');
   };
 
   /**
@@ -173,87 +193,75 @@
    * @param  {string} num
    * @return {number}
    */
-  numberWords.parse = function (num) {
-    if (typeof num !== 'string') { return false; }
+  numbered.parse = function (num) {
+    var modifier = 1;
+    var largest = 0;
+    var largestInterval = 0;
+    var zeros = 0; // Track leading zeros in a decimal.
+    var stack = [];
 
-    var modifier        = 1,
-        largest         = 0,
-        largestInterval = 0,
-        zeros           = 0, // Keep track of the number of leading zeros in the decimal
-        stack           = [];
+    var total = num.split(/\W+/g)
+      .map(function (word) {
+        var num = word.toLowerCase();
 
-    var totalStack = function () {
-      var total = stack.reduceRight(function (memo, num, index, array) {
-        if (num > array[index + 1]) {
-          return memo * num;
+        return WORD_MAP[num] !== undefined ? WORD_MAP[num] : num;
+      })
+      .filter(function (num) {
+        if (num === '-') modifier = -1;
+        if (num === '.') return true; // Decimal points are a special case.
+
+        return typeof num === 'number';
+      })
+      .reduceRight(function (memo, num) {
+        var interval = intervals(num);
+
+        // Check the interval is smaller than the largest one, then create a stack.
+        if (typeof num === 'number' && interval < largestInterval) {
+          stack.push(num);
+          if (stack.length === 1) return memo - largest;
+          return memo;
         }
-        return memo + num;
+
+        memo += totalStack(stack, largest);
+        stack = []; // Reset the stack for more computations.
+
+        // If the number is a decimal, transform everything we have worked with.
+        if (num === '.') {
+          var decimals = zeros + String(memo).length;
+
+          zeros = 0;
+          largest = 0;
+          largestInterval = 0;
+
+          return memo * Math.pow(10, -decimals);
+        }
+
+        // Buffer encountered zeros.
+        if (num === 0) {
+          zeros += 1;
+          return memo;
+        }
+
+        // Shove the number on the front if the intervals match and the number whole.
+        if (memo >= 1 && interval === largestInterval) {
+          var output = '';
+
+          while (zeros > 0) {
+            zeros -= 1;
+            output += '0';
+          }
+
+          return Number(String(num) + output + String(memo));
+        }
+
+        largest = num;
+        largestInterval = intervals(largest);
+
+        return (memo + num) * Math.pow(10, zeros);
       }, 0);
 
-      return total * largest;
-    };
-
-    var total = num.split(/\W+/g).map(function (num) {
-      num = num.toLowerCase(); // Make life easier
-      return numbersMap[num] != null ? numbersMap[num] : num;
-    }).filter(function (num) {
-      if (num === '-') {
-        modifier = -1;
-      }
-      if (num === '.') {
-        return true; // Decimal points are a special case
-      }
-      return isFinite(num); // Remove numbers we don't understand
-    }).reduceRight(function (memo, num) {
-      var interval = intervals(num),
-          decimals,
-          output;
-
-      // Check the interval is smaller than the largest one, then create a stack
-      if (typeof num === 'number' && interval < largestInterval) {
-        if (!stack.length) { memo = memo - largest; }
-        stack.push(num);
-        return memo;
-      }
-
-      memo  = memo + totalStack();
-      stack = []; // Reset the stack for more computations
-
-      // If the number is a decimal, transform everything we were just working with
-      if (num === '.') {
-        decimals = zeros + ('' + memo).length;
-        zeros    = 0;
-        // Reset the largest intervals and stuff
-        largest         = 0;
-        largestInterval = 0;
-        return memo * Math.pow(10, decimals * -1);
-      }
-
-      // Keep a count of zeros we encountered
-      if (num === 0) {
-        zeros += 1;
-        return memo;
-      }
-
-      // Shove the number on the front if the intervals match and the number is a whole
-      if (memo >= 1 && interval === largestInterval) {
-        output = '' + memo;
-        // Decrement the zeros count while adding zeros to the front of the number
-        while (zeros && zeros--) {
-          output = '0' + output;
-        }
-        return +(num + output);
-      }
-
-      // Store the largest number for future use
-      largest         = num;
-      largestInterval = intervals(largest);
-
-      return (memo + num) * Math.pow(10, zeros);
-    }, 0);
-
-    return modifier * (total + totalStack());
+    return modifier * (total + totalStack(stack, largest));
   };
 
-  return numberWords;
+  return numbered;
 });
