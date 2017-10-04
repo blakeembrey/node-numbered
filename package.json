@@ -27,6 +27,6 @@
   "readmeFilename": "Readme.md",
   "devDependencies": {
     "istanbul": "^0.4.5",
-    "mocha": "^3.3.0"
+    "mocha": "^4.0.0"
   }
 }
